@@ -25,3 +25,9 @@ buildNumber.properties
 *.zip
 *.tar.gz
 *.rar
+
+# IntelliJ project files
+*.iml
+*.iws
+*.ipr
+.idea/
