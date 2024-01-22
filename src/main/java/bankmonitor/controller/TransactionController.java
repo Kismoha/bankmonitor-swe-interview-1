@@ -24,46 +24,46 @@ import bankmonitor.repository.TransactionRepository;
 @RequestMapping("/")
 public class TransactionController {
 
-	@Autowired
-	private TransactionRepository transactionRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
-	@GetMapping("/transactions")
-	@ResponseBody
-	public List<Transaction> getAllTransactions() {
-		return transactionRepository.findAll();
-	}
-
-	@PostMapping("/transactions")
-	@ResponseBody
-	public Transaction createTransaction(@RequestBody String jsonData) {
-    Transaction data = new Transaction(jsonData);
-		return transactionRepository.save(data);
-	}
-
-	@PutMapping("/transactions/{id}")
-	@ResponseBody
-	public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody String update) {
-
-    JSONObject updateJson = new JSONObject(update);
-
-		Optional<Transaction> data = transactionRepository.findById(id);
-		if (!data.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-
-		Transaction transaction = data.get();
-    JSONObject trdata = new JSONObject(transaction.getData());
-
-    if (updateJson.has("amount")) {
-      trdata.put("amount", updateJson.getInt("amount"));
+    @GetMapping("/transactions")
+    @ResponseBody
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll();
     }
 
-    if (updateJson.has(Transaction.REFERENCE_KEY)) {
-      trdata.put(Transaction.REFERENCE_KEY, updateJson.getString(Transaction.REFERENCE_KEY));
+    @PostMapping("/transactions")
+    @ResponseBody
+    public Transaction createTransaction(@RequestBody String jsonData) {
+        Transaction data = new Transaction(jsonData);
+        return transactionRepository.save(data);
     }
-    transaction.setData(trdata.toString());
 
-		Transaction updatedTransaction = transactionRepository.save(transaction);
-		return ResponseEntity.ok(updatedTransaction);
-	}
+    @PutMapping("/transactions/{id}")
+    @ResponseBody
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long id, @RequestBody String update) {
+
+        JSONObject updateJson = new JSONObject(update);
+
+        Optional<Transaction> data = transactionRepository.findById(id);
+        if (!data.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Transaction transaction = data.get();
+        JSONObject trdata = new JSONObject(transaction.getData());
+
+        if (updateJson.has("amount")) {
+            trdata.put("amount", updateJson.getInt("amount"));
+        }
+
+        if (updateJson.has(Transaction.REFERENCE_KEY)) {
+            trdata.put(Transaction.REFERENCE_KEY, updateJson.getString(Transaction.REFERENCE_KEY));
+        }
+        transaction.setData(trdata.toString());
+
+        Transaction updatedTransaction = transactionRepository.save(transaction);
+        return ResponseEntity.ok(updatedTransaction);
+    }
 }
