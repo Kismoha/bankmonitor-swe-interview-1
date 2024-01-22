@@ -83,6 +83,25 @@
 
 	<build>
 		<plugins>
+
+          <plugin>
+            <groupId>com.github.ekryd.sortpom</groupId>
+            <artifactId>sortpom-maven-plugin</artifactId>
+            <version>3.3.0</version>
+            <configuration>
+              <createBackupFile>false</createBackupFile>
+              <sortProperties>true</sortProperties>
+              <sortDependencies>scope,groupId,artifactId</sortDependencies>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>sort</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
