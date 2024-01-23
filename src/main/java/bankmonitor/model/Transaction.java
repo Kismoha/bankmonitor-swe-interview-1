@@ -16,6 +16,7 @@ import org.json.JSONObject;
 public class Transaction {
 
     public static final String REFERENCE_KEY = "reference";
+    public static final String AMOUNT_KEY = "amount";
 
     public Transaction() {
     }
@@ -46,8 +47,8 @@ public class Transaction {
 
     public Integer getAmount() {
         JSONObject jsonData = new JSONObject(this.data);
-        if (jsonData.has("amount")) {
-            return jsonData.getInt("amount");
+        if (jsonData.has(AMOUNT_KEY)) {
+            return jsonData.getInt(AMOUNT_KEY);
         } else {
             return -1;
         }

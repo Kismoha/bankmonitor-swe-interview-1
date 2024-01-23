@@ -49,8 +49,8 @@ public class TransactionServiceV1Impl implements TransactionService {
         JSONObject updateJson = new JSONObject(updateJSON);
         JSONObject newTransactionData = new JSONObject(currentTransaction.getData());
 
-        if (updateJson.has("amount")) {
-            newTransactionData.put("amount", updateJson.getInt("amount"));
+        if (updateJson.has(Transaction.AMOUNT_KEY)) {
+            newTransactionData.put(Transaction.AMOUNT_KEY, updateJson.getInt(Transaction.AMOUNT_KEY));
         }
 
         if (updateJson.has(Transaction.REFERENCE_KEY)) {
