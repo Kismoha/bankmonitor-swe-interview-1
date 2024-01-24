@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity
@@ -17,9 +18,7 @@ public class Transaction {
 
     public static final String REFERENCE_KEY = "reference";
     public static final String AMOUNT_KEY = "amount";
-
-    public Transaction() {
-    }
+    public static final String PROVIDED_DATA_IS_NULL = "Provided data is null!";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +30,9 @@ public class Transaction {
     @Column(name = "data")
     private String data;
 
+    public Transaction() {
+    }
+
     public Transaction(String jsonData) {
         this.timestamp = LocalDateTime.now();
         this.data = jsonData;
@@ -40,26 +42,25 @@ public class Transaction {
         return this.data;
     }
 
-    public Boolean setData(String data) {
+    public void setData(String data) {
         this.data = data;
-        return true;
     }
 
     public Integer getAmount() {
-        JSONObject jsonData = new JSONObject(this.data);
-        if (jsonData.has(AMOUNT_KEY)) {
-            return jsonData.getInt(AMOUNT_KEY);
-        } else {
-            return -1;
-        }
+        JSONObject jsonData = getJSONData();
+        return jsonData.has(AMOUNT_KEY) ? jsonData.getInt(AMOUNT_KEY) : null;
     }
 
     public String getReference() {
-        JSONObject jsonData = new JSONObject(this.data);
-        if (jsonData.has(REFERENCE_KEY)) {
-            return jsonData.getString(REFERENCE_KEY);
-        } else {
-            return "";
+        JSONObject jsonData = getJSONData();
+        return jsonData.has(REFERENCE_KEY) ? jsonData.getString(REFERENCE_KEY) : null;
+    }
+
+    private JSONObject getJSONData() {
+        if (this.data == null) {
+            throw new JSONException(PROVIDED_DATA_IS_NULL);
         }
+
+        return new JSONObject(this.data);
     }
 }
