@@ -1,6 +1,6 @@
 package bankmonitor.model;
 
-import bankmonitor.utility.TransactionException;
+import org.json.JSONException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,8 +29,8 @@ public class TransactionTest {
     void givenIncorrectJSON_whenGetterCalled_thenThrowsJSONException(String data) {
         Transaction transaction = new Transaction(data);
 
-        Assertions.assertThrows(TransactionException.class, transaction::getReference);
-        Assertions.assertThrows(TransactionException.class, transaction::getAmount);
+        Assertions.assertThrows(JSONException.class, transaction::getReference);
+        Assertions.assertThrows(JSONException.class, transaction::getAmount);
     }
 
     static Stream<Arguments> correctJSONProvider() {
