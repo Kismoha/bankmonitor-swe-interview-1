@@ -33,8 +33,7 @@ public class TransactionServiceV1Impl implements TransactionService {
 
     @Override
     public Transaction createTransaction(String jsonData) {
-        JSONObject jsonObjectData = new JSONObject(jsonData);
-        Transaction newTransaction = new Transaction(jsonObjectData.toString());
+        Transaction newTransaction = new Transaction(getJsonObject(jsonData));
 
         return transactionRepository.save(newTransaction);
     }
@@ -46,8 +45,8 @@ public class TransactionServiceV1Impl implements TransactionService {
         Transaction currentTransaction = optionalTransaction
                 .orElseThrow(() -> new TransactionException("No transaction found with the given id!"));
 
-        JSONObject updateJson = new JSONObject(updateJSON);
-        JSONObject newTransactionData = new JSONObject(currentTransaction.getData());
+        JSONObject updateJson = getJsonObject(updateJSON);
+        JSONObject newTransactionData = getJsonObject(currentTransaction.getData());
 
         if (updateJson.has(Transaction.AMOUNT_KEY)) {
             newTransactionData.put(Transaction.AMOUNT_KEY, updateJson.getInt(Transaction.AMOUNT_KEY));
@@ -60,5 +59,23 @@ public class TransactionServiceV1Impl implements TransactionService {
         currentTransaction.setData(newTransactionData.toString());
 
         return this.transactionRepository.save(currentTransaction);
+    }
+
+    private JSONObject getJsonObject(String jsonData) {
+        TransactionException invalidDataException = new TransactionException("Provided JSON data is invalid!");
+
+        if (jsonData == null) {
+            throw invalidDataException;
+        }
+
+        JSONObject jsonObject;
+
+        try {
+            jsonObject = new JSONObject(jsonData);
+        } catch (JSONException exception) {
+            throw invalidDataException;
+        }
+
+        return jsonObject;
     }
 }
