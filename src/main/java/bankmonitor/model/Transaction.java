@@ -1,6 +1,7 @@
 package bankmonitor.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +39,11 @@ public class Transaction {
         this.data = jsonData;
     }
 
+    public Transaction(JSONObject jsonObject) {
+        this.timestamp = LocalDateTime.now();
+        this.data = jsonObject.toString();
+    }
+
     public String getData() {
         return this.data;
     }
@@ -62,5 +68,24 @@ public class Transaction {
         }
 
         return new JSONObject(this.data);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Transaction that = (Transaction) o;
+        return id == that.id && Objects.equals(timestamp, that.timestamp) && Objects.equals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, timestamp, data);
     }
 }
