@@ -2,7 +2,6 @@ package bankmonitor.service;
 
 import bankmonitor.model.Transaction;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface TransactionService {

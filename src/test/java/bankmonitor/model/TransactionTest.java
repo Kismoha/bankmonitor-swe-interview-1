@@ -1,7 +1,6 @@
 package bankmonitor.model;
 
 import bankmonitor.utility.TransactionException;
-import org.json.JSONException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
