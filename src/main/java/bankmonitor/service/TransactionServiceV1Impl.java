@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,17 +44,16 @@ public class TransactionServiceV1Impl implements TransactionService {
                 .orElseThrow(() -> new TransactionException("No transaction found with the given id!"));
 
         JSONObject updateJson = getJsonObject(updateJSON);
-        JSONObject newTransactionData = getJsonObject(currentTransaction.getData());
+        JSONObject updatedJson = getJsonObject(currentTransaction.getData());
 
-        if (updateJson.has(Transaction.AMOUNT_KEY)) {
-            newTransactionData.put(Transaction.AMOUNT_KEY, updateJson.getInt(Transaction.AMOUNT_KEY));
+        Iterator<String> jsonKeyIterator = updateJson.keys();
+
+        while (jsonKeyIterator.hasNext()) {
+            String key = jsonKeyIterator.next();
+            updatedJson.put(key, updateJson.get(key));
         }
 
-        if (updateJson.has(Transaction.REFERENCE_KEY)) {
-            newTransactionData.put(Transaction.REFERENCE_KEY, updateJson.getString(Transaction.REFERENCE_KEY));
-        }
-
-        currentTransaction.setData(newTransactionData.toString());
+        currentTransaction.setData(updatedJson.toString());
 
         return this.transactionRepository.save(currentTransaction);
     }
